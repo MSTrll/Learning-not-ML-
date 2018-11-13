@@ -1,0 +1,124 @@
+#include<iostream>
+#include<vector>
+#include <utility>
+#include<list>
+using namespace std;
+void PrintListEd(vector<pair<int,int> > g)
+{
+  cout << "Список ребер: " << endl;
+    for( int i = 0; i < g.size(); i++)
+    {
+        cout << i + 1 << ") " << g[i].first << ", " << g[i].second << endl;
+    }
+  }
+void MakeMatrixAdj(vector<pair<int,int> > g, bool** matrix){
+  for(int i = 0; i < g.size(); i++)
+  {
+    matrix[g[i].first-1][g[i].second-1] = 1;
+    matrix[g[i].second-1][g[i].first-1] = 1;
+  }
+}
+void PrintMatrixAdj(bool** m, int v)
+{
+  cout << "матрица смежности: " << endl;
+    for( int i = 0; i < v; i++){
+      for( int j = 0; j < v; j++)
+      {
+        cout << m[i][j] << " ";
+        }
+      cout << endl;
+     }
+  }
+void MakeMatrixIn(vector<pair<int,int> > p, bool** q)
+{
+  for(int i = 0; i < p.size(); i++)
+  {
+    q[i][p[i].first-1] = 1;
+    q[i][p[i].second-1] = 1;
+  }
+}
+void PrintMatrixIn(bool** m, int r, int v)
+{
+  cout<< "матрица инцидентности: " << endl;
+    for( int i = 0; i < r; i++){
+     for( int j = 0; j < v; j++){
+      cout << m[i][j] << " ";
+    }
+    cout << endl;
+  }
+}
+void MakeListCon(vector<pair<int,int> > a, vector<vector<int> > &b, int k)
+{
+vector<int> temp;
+for (int j = 0; j < k; j++)
+{
+  b.push_back(temp);
+}
+for(int i = 0; i < a.size(); i++)
+{
+  b[a[i].first-1].push_back(a[i].second);
+  b[a[i].second-1].push_back(a[i].first);
+}
+}
+void PrintListCon(vector<vector<int> > c, int l)
+{
+  cout << "список инцедентности: " << endl;
+    for( int i = 0; i < l; i++)
+    {
+    cout << i + 1 << ") ";
+      for( int j = 0; j < c[i].size(); j++)
+      {
+      cout << c[i][j] << " ";
+    }
+    cout << endl;
+  }
+}
+int main(int argc, char** argv)
+{
+int V, E, v1, v2;
+cout << "введите количество вершин: " << endl;
+cin >> V;
+cout << "введите количество ребер: " << endl;
+cin >> E;
+vector<pair<int,int> > g;
+for(int i = 0; i < E; i++)
+{
+cout << "введите информацию о  " << i + 1 << " вершине: ";
+cin >> v1 >> v2;
+g.push_back(make_pair(v1, v2));
+}
+bool** MatrixIn = new bool*[E];
+ for(int i = 0; i < E; i++){ 
+   MatrixIn[i] = new bool[V];
+ }
+for(int i = 0; i < E; i++)
+{
+    for(int j = 0; j < V; j++)
+    {
+    MatrixIn[i][j]=0;
+  }
+}
+bool** MatrixAdj = new bool*[V];
+for(int i = 0; i < V; i++){
+  MatrixAdj[i] = new bool[V];
+}
+for(int i = 0; i < V; i++)
+{
+  for(int j = 0; j < V; j++)
+  {
+    MatrixAdj[i][j] = 0;
+  }
+}
+vector<vector<int> > c;
+MakeMatrixAdj(g, MatrixAdj);
+MakeMatrixIn(g, MatrixIn);
+MakeListCon(g, c, V);
+PrintListEd(g);
+cout << endl;
+PrintMatrixAdj(MatrixAdj, V);
+cout << endl;
+PrintMatrixIn(MatrixIn, E, V);
+cout << endl;
+PrintListCon(c, V);
+return 0;
+}
